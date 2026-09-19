@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#172b39">
+  <title>秋招作战台</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard" aria-label="秋招作战台首页">
+        <span class="brand-mark">秋</span>
+        <span><strong>秋招作战台</strong><span>Application Command Center</span></span>
+      </a>
+      <div>
+        <div class="nav-label">工作区</div>
+        <nav class="nav-list" id="main-nav" aria-label="主导航">
+          <button class="nav-btn active" data-page="dashboard"><span class="nav-icon">⌂</span><span>总览</span></button>
+          <button class="nav-btn" data-page="applications"><span class="nav-icon">▦</span><span>投递管理</span><span class="nav-badge" id="nav-app-count">0</span></button>
+          <button class="nav-btn" data-page="opportunities"><span class="nav-icon">✦</span><span>机会中心</span><span class="nav-badge" id="nav-opportunity-count">0</span></button>
+          <button class="nav-btn" data-page="reviews"><span class="nav-icon">◉</span><span>面试复盘</span><span class="nav-badge" id="nav-review-count">0</span></button>
+          <button class="nav-btn" data-page="analytics"><span class="nav-icon">◒</span><span>分析复盘</span></button>
+          <button class="nav-btn" data-page="import"><span class="nav-icon">⇧</span><span>数据导入</span></button>
+          <button class="nav-btn" data-page="settings"><span class="nav-icon">⚙</span><span>偏好设置</span></button>
+        </nav>
+      </div>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-card">
+        <strong><span class="dot"></span>本地数据模式</strong>
+        数据保存在当前浏览器中，不上传到服务器。建议每周导出一次 JSON 备份。
+      </div>
+    </aside>
+
+    <div class="main-shell">
+      <header class="topbar">
+        <div class="page-heading">
+          <small id="page-kicker">Command center</small>
+          <h1 id="page-title">秋招总览</h1>
+          <p id="page-subtitle">管理投递、面试和下一步行动</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-secondary" data-action="go-import">⇧ <span class="btn-label">导入飞书数据</span></button>
+          <button class="btn btn-primary" data-action="add-application">＋ <span class="btn-label">新增投递</span></button>
+        </div>
+      </header>
+      <main id="app-main" class="page" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <div id="modal-root"></div>
+  <div id="toast-root" class="toast-root" aria-live="polite"></div>
+
+  <script src="js/store.js"></script>
+  <script src="js/recommender.js"></script>
+  <script src="js/capture-module.js"></script>
+  <script src="js/reviews-module.js"></script>
+  <script src="js/reminders-module.js"></script>
+  <script src="js/daily-stats-module.js"></script>
+  <script src="js/dashboard-module.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

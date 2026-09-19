@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>采集岗位</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <div class="brand-mark">秋</div>
+    <div><strong>岗位采集器</strong><span>发送到本地秋招作战台</span></div>
+  </header>
+  <main>
+    <div id="status" class="status">正在读取当前页面...</div>
+    <form id="capture-form">
+      <label>公司<input name="company" required></label>
+      <label>岗位<input name="role" required></label>
+      <div class="two-cols">
+        <label>城市<input name="city"></label>
+        <label>薪资<input name="salary"></label>
+      </div>
+      <label>投递地址<input name="url" type="url"></label>
+      <label>JD 原文<textarea name="jdText" rows="12"></textarea></label>
+      <button type="submit" class="primary">发送到岗位采集箱</button>
+      <button type="button" id="open-app" class="secondary">打开秋招作战台</button>
+    </form>
+  </main>
+  <script src="popup.js"></script>
+</body>
+</html>

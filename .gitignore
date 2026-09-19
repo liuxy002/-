@@ -1,0 +1,10 @@
+.qiuzhao-server.pid
+data/*.json
+data/*.tmp
+resume_extracted.txt
+app-*.png
+app-dom.html
+.chrome-*/
+node_modules/
+*.log
+*.tmp

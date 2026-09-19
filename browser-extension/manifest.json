@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "秋招作战台岗位采集器",
+  "version": "1.0.0",
+  "description": "从当前打开的招聘页面提取公司和岗位信息，发送到本地秋招作战台。",
+  "permissions": ["activeTab", "scripting", "tabs", "storage"],
+  "host_permissions": ["http://127.0.0.1:4173/*"],
+  "action": {
+    "default_title": "采集当前岗位",
+    "default_popup": "popup.html"
+  }
+}

@@ -8,3 +8,4 @@ app-dom.html
 node_modules/
 *.log
 *.tmp
+migrated_backup.json

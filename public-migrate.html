@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>一键迁移到公网版 · 秋招作战台</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page" style="max-width:760px;margin:0 auto">
+    <div class="stack">
+      <section class="hero"><div class="hero-content"><div><div class="hero-kicker">One-click migration</div><h2>一键迁移到公网版</h2><p>本页面会读取当前浏览器里的秋招数据，并直接发送到公网版。数据不会上传到服务器。</p></div></div></section>
+      <section class="card"><div class="card-body stack">
+        <div id="summary" class="notice notice-info">正在读取本地数据...</div>
+        <button id="start" class="btn btn-primary" type="button" disabled>开始一键迁移</button>
+        <div id="status" class="notice notice-warning">等待本地数据检查。</div>
+      </div></section>
+    </div>
+  </main>
+  <script>
+    const STORAGE_KEY = 'qiuzhao_workbench_v1';
+    const PUBLIC_ORIGIN = 'https://liuxy002.github.io';
+    const PUBLIC_URL = 'https://liuxy002.github.io/-/migrate.html?receiver=1';
+    const summary = document.getElementById('summary');
+    const status = document.getElementById('status');
+    const startButton = document.getElementById('start');
+    let backup = null;
+    let targetWindow = null;
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) throw new Error('当前浏览器没有本地数据');
+      backup = JSON.parse(raw);
+      if (!backup || !Array.isArray(backup.applications)) throw new Error('本地数据格式不正确');
+      summary.className = 'notice notice-success';
+      summary.textContent = `已找到：${backup.applications.length} 条投递、${(backup.reviews || []).length} 条面试复盘、${(backup.reminders || []).length} 条提醒。`;
+      startButton.disabled = false;
+      if (!backup.applications.length) throw new Error('当前浏览器中的投递记录为 0 条，请确认使用保存过数据的浏览器');
+    } catch (error) {
+      summary.className = 'notice notice-warning';
+      summary.textContent = `读取失败：${error.message}`;
+    }
+    startButton.addEventListener('click', () => {
+      if (!backup) return;
+      targetWindow = window.open(PUBLIC_URL, 'qiuzhao-public-migration');
+      if (!targetWindow) {
+        status.className = 'notice notice-warning';
+        status.textContent = '浏览器阻止了新窗口，请允许弹窗后重试。';
+        return;
+      }
+      status.className = 'notice notice-info';
+      status.textContent = '正在打开公网迁移页，等待连接...';
+    });
+    window.addEventListener('message', (event) => {
+      if (event.origin !== PUBLIC_ORIGIN) return;
+      if (event.data && event.data.type === 'QIUZHAO_MIGRATION_READY' && targetWindow && backup) {
+        targetWindow.postMessage({ type: 'QIUZHAO_BACKUP', backup }, PUBLIC_ORIGIN);
+        status.className = 'notice notice-success';
+        status.textContent = '数据已发送，公网页面正在写入并打开系统...';
+      }
+    });
+  </script>
+</body>
+</html>

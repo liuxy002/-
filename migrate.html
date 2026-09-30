@@ -53,6 +53,25 @@
       status.textContent = '迁移完成，正在打开秋招作战台...';
       setTimeout(() => { location.href = './#dashboard'; }, 800);
     });
+    window.addEventListener('message', (event) => {
+      if (event.origin !== 'http://127.0.0.1:4173') return;
+      if (!event.data || event.data.type !== 'QIUZHAO_BACKUP' || !event.data.backup) return;
+      try {
+        const incoming = event.data.backup;
+        if (!Array.isArray(incoming.applications)) throw new Error('备份格式不正确');
+        localStorage.setItem('qiuzhao_workbench_v1', JSON.stringify(incoming));
+        status.className = 'notice notice-success';
+        status.textContent = `迁移完成：${incoming.applications.length} 条投递。正在打开系统...`;
+        setTimeout(() => { location.href = './#dashboard'; }, 900);
+      } catch (error) {
+        status.className = 'notice notice-warning';
+        status.textContent = `迁移失败：${error.message}`;
+      }
+    });
+    if (window.opener && !window.opener.closed) {
+      window.opener.postMessage({ type: 'QIUZHAO_MIGRATION_READY' }, 'http://127.0.0.1:4173');
+    }
   </script>
 </body>
 </html>
+

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>迁移本地数据 · 秋招作战台</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page" style="max-width:760px;margin:0 auto">
+    <div class="stack">
+      <section class="hero">
+        <div class="hero-content">
+          <div><div class="hero-kicker">Data migration</div><h2>把本地版数据迁移到公网版</h2><p>本地数据和公网数据属于不同的浏览器网址，需要手动迁移一次。迁移后会保留投递、提醒、面试复盘和偏好设置。</p></div>
+        </div>
+      </section>
+      <section class="card"><div class="card-body stack">
+        <div class="notice notice-info"><strong>第一步：</strong>打开本地版“数据导入”页面，点击“导出全量 JSON 备份”。</div>
+        <div class="notice notice-info"><strong>第二步：</strong>选择刚导出的 JSON 文件。公网版会将其写入当前浏览器的本地存储。</div>
+        <label class="field"><span>选择备份文件</span><input id="backup-file" type="file" accept=".json,application/json"></label>
+        <button id="migrate" class="btn btn-primary" type="button" disabled>开始迁移</button>
+        <div id="status" class="notice notice-warning">尚未选择备份文件。</div>
+      </div></section>
+    </div>
+  </main>
+  <script>
+    const fileInput = document.getElementById('backup-file');
+    const button = document.getElementById('migrate');
+    const status = document.getElementById('status');
+    let backup = null;
+    fileInput.addEventListener('change', async () => {
+      backup = null;
+      button.disabled = true;
+      const file = fileInput.files && fileInput.files[0];
+      if (!file) return;
+      try {
+        const data = JSON.parse(await file.text());
+        if (!data || !Array.isArray(data.applications)) throw new Error('不是有效的秋招作战台备份');
+        backup = data;
+        button.disabled = false;
+        status.className = 'notice notice-success';
+        status.textContent = `已读取：${data.applications.length} 条投递、${(data.reviews || []).length} 条面试复盘、${(data.reminders || []).length} 条提醒。`;
+      } catch (error) {
+        status.className = 'notice notice-warning';
+        status.textContent = `读取失败：${error.message}`;
+      }
+    });
+    button.addEventListener('click', () => {
+      if (!backup) return;
+      localStorage.setItem('qiuzhao_workbench_v1', JSON.stringify(backup));
+      status.className = 'notice notice-success';
+      status.textContent = '迁移完成，正在打开秋招作战台...';
+      setTimeout(() => { location.href = './#dashboard'; }, 800);
+    });
+  </script>
+</body>
+</html>

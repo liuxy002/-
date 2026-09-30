@@ -6,6 +6,7 @@
   let toast;
   let render;
   let apiOnline = true;
+  const LOCAL_MODE = ['127.0.0.1', 'localhost'].includes(window.location.hostname);
 
   async function api(path = '', options = {}) {
     const response = await fetch(`/api/captured-jobs${path}`, {
@@ -72,6 +73,9 @@
   }
 
   function renderPage() {
+    if (!LOCAL_MODE) {
+      return `<div class="card"><div class="card-header"><div><h3>公网体验模式</h3><p>岗位采集器只在本地运行时可用</p></div></div><div class="card-body stack"><p class="muted small">当前页面运行在公网，每位访问者的投递数据只保存在自己的浏览器中。浏览器采集器需要本地服务配合，因此公网体验版暂不接收采集数据。</p><div class="notice notice-info">你仍然可以使用投递管理、搜索排序、每日统计、提醒和面试复盘。需要采集岗位时，请在电脑本地启动秋招作战台。</div></div></div>`;
+    }
     const { escapeHTML } = helpers;
     const all = ui.capturedJobs || [];
     const counts = {
@@ -153,4 +157,5 @@
     }
   };
 })();
+
 

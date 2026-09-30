@@ -197,6 +197,12 @@
 
   function buildTasks() {
     const tasks = [];
+    (store.state.reminders || []).filter((reminder) => !reminder.completed && reminder.at).forEach((reminder) => {
+      const days = daysUntil(reminder.at);
+      if (days <= 3) {
+        tasks.push({ id: 'reminder-' + reminder.id + '-' + reminder.at, reminderId: reminder.id, applicationId: reminder.applicationId, type: 'custom', title: reminder.title, detail: fmtDateTime(reminder.at) + ' · ' + (reminder.type || '自定义提醒'), due: reminder.at, priority: days < 0 ? 100 : days === 0 ? 95 : 65, icon: '✦' });
+      }
+    });
     store.state.applications.filter(isActive).forEach((application) => {
       const label = `${application.company} · ${application.role}`;
       if (application.deadline && stageInfo(application.status).order < 1) {
@@ -1178,6 +1184,7 @@
   document.addEventListener('submit', handleSubmit);
   document.addEventListener('change', handleChange);
   main.addEventListener('input', handleInput);
+  main.addEventListener('dblclick', (event) => { const row = event.target.closest('tr[data-application-id]'); if (row && !event.target.closest('a, button, input, select, textarea')) openApplicationModal(row.dataset.applicationId); });
   main.addEventListener('compositionstart', handleCompositionStart);
   main.addEventListener('compositionend', handleCompositionEnd);
   document.addEventListener('keydown', (event) => {
@@ -1232,6 +1239,8 @@
   render();
   window.QiuzhaoApp = { openApplicationModal };
 })();
+
+
 
 
 

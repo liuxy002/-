@@ -628,3 +628,6 @@ main.page:focus,
 main.page:focus-visible {
   outline: none;
 }
+
+.data-table tbody tr[data-application-id] { cursor: pointer; }
+.data-table tbody tr[data-application-id]:hover { background: var(--blue-soft); }

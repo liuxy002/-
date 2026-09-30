@@ -55,7 +55,7 @@ $process = Start-Process -FilePath $nodePath -ArgumentList @($serverPath) -Worki
 for ($i = 0; $i -lt 40; $i += 1) {
   Start-Sleep -Milliseconds 250
   if (Test-ServiceReady) {
-    Write-Host 'The application is running.' -ForegroundColor Green
+    Write-Host 'The application is running. Keep this window open.' -ForegroundColor Green
     if ($env:QIUZHAO_NO_BROWSER -ne '1') { Start-Process $url }
     exit 0
   }
@@ -67,3 +67,6 @@ if (-not $process.HasExited) {
 }
 Write-Host 'Startup failed: the local service did not become ready in time.' -ForegroundColor Red
 exit 1
+
+
+

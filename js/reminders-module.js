@@ -92,13 +92,14 @@
   function reminderForm(reminder = {}) {
     const { escapeHTML, attr } = helpers;
     const at = reminder.at ? String(reminder.at).replace(' ', 'T').slice(0, 16) : `${new Date().toISOString().slice(0, 10)}T09:00`;
+    const selectedApplication = reminder.applicationId ? store.getApplication(reminder.applicationId) : null;
     return `<form data-form="reminder-save">
       <input type="hidden" name="id" value="${attr(reminder.id || '')}">
       <div class="form-grid">
         <div class="field span-2"><label>提醒内容 *</label><input name="title" required value="${attr(reminder.title)}" placeholder="例如：跟进 HR / 准备一面 / 完成测评"></div>
         <div class="field"><label>提醒类型</label><select name="type">${['自定义','投递','跟进','测评','笔试','面试','材料','其他'].map((item) => `<option value="${item}" ${reminder.type === item ? 'selected' : ''}>${item}</option>`).join('')}</select></div>
         <div class="field"><label>提醒时间 *</label><input type="datetime-local" name="at" required value="${attr(at)}"></div>
-        <div class="field span-3"><label>关联投递记录（可选）</label><select name="applicationId"><option value="">不关联</option>${store.state.applications.map((item) => `<option value="${attr(item.id)}" ${reminder.applicationId === item.id ? 'selected' : ''}>${escapeHTML(item.company)} · ${escapeHTML(item.role)}</option>`).join('')}</select></div>
+        <div class="field span-3"><label>关联投递记录（可选）</label><input name="applicationId" list="reminder-application-options" value="${attr(selectedApplication ? selectedApplication.company + ' · ' + selectedApplication.role : '')}" placeholder="输入公司或岗位名称搜索" autocomplete="off"><datalist id="reminder-application-options">${store.state.applications.map((item) => `<option value="${attr(item.company + ' · ' + item.role)}"></option>`).join(String())}</datalist></div>
         <div class="field span-3"><label>备注</label><textarea name="note" placeholder="需要准备什么、联系谁、注意什么">${escapeHTML(reminder.note)}</textarea></div>
       </div>
       <div class="form-actions"><button class="btn btn-secondary" type="button" data-action="close-modal">取消</button><button class="btn btn-primary" type="submit">保存提醒</button></div>
@@ -220,6 +221,10 @@
     handleAction
   };
 })();
+
+
+
+
 
 
 

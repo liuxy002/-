@@ -10,7 +10,7 @@
     const tasks = helpers.buildTasks();
     const todayCount = applications.filter((item) => item.appliedAt === helpers.today()).length;
     const recommendations = R.rankCandidates(store.state).slice(0, 4);
-    const schedule = window.QiuzhaoReminders.buildItems().slice(0, 6);
+    const schedule = window.QiuzhaoReminders.buildItems().filter((item) => !item.custom || !tasks.some((task) => task.reminderId === item.reminderId)).slice(0, 6);
     const targetProgress = Math.min(100, Math.round(stats.submitted / Math.max(1, Number(store.state.preferences.targetApplications || 60)) * 100));
     const offerProgress = Math.min(100, Math.round(stats.offers / Math.max(1, Number(store.state.preferences.targetOffers || 1)) * 100));
     const notificationAllowed = 'Notification' in window && Notification.permission === 'granted';
@@ -49,6 +49,7 @@
     render
   };
 })();
+
 
 
 
